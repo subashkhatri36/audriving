@@ -1,0 +1,22 @@
+[
+  {
+    "question": "This is the question",
+    "image": "",
+    "category":"abc",
+    "options": [
+      {
+        "sno": 1,
+        "option": "answer 1"
+      },
+      {
+        "sno": 2,
+        "option": "answer 2"
+      },
+      {
+        "sno": 3,
+        "option": "answer 3"
+      }
+    ],
+    "correct": 1
+  }
+]
