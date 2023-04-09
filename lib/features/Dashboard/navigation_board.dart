@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class NavigationBoard extends StatefulWidget {
   const NavigationBoard({Key? key}) : super(key: key);
@@ -10,6 +11,10 @@ class NavigationBoard extends StatefulWidget {
 class _NavigationBoardState extends State<NavigationBoard> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: Text('This is Navigation Page.'),
+      ),
+    );
   }
 }

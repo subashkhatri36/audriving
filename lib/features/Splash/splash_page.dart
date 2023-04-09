@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
@@ -25,11 +26,23 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocBuilder<DktBloc, DrivingState>(builder: (context, state) {
-      return const SplashWidget();
+        body: BlocListener<DktBloc, DrivingState>(
+      listener: (context, state) {
 
-      // return widget here based on BlocA's state
-    }));
+        if (state.menu != null && state.models != null) {
+          context.replace('/navigation');
+        }
+      },
+      child: const SplashWidget(),
+    )
+        //  BlocBuilder<DktBloc, DrivingState>(
+        //   builder: (context, state) {
+        //     return const SplashWidget();
+
+        //     // return widget here based on BlocA's state
+        //   },
+        // ),
+        );
   }
 }
 
