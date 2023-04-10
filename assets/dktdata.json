@@ -23,7 +23,7 @@
   
   {
     "question": "You wish to turn left at this roundabout. Which lane may you use?",
-    "image": "02.png",
+    "image": "2.png",
     "category":"Intersections",
     "options": [
       {
@@ -400,7 +400,7 @@
   },
   
   {
-    "question": "Which movements shown in the diagram can legally be made by the driver of the car marked "A"?",
+    "question": "Which movements shown in the diagram can legally be made by the driver of the car marked 'A'?",
     "image": "14.png",
     "category":"Driving General",
     "options": [
@@ -3423,7 +3423,7 @@
   },
   
   {
-    "question": "The traffic on the other side of this intersection has stopped. You are in the car marked "X" and want to cross the intersection. The lights are green. What should you do?",
+    "question": "The traffic on the other side of this intersection has stopped. You are in the car marked 'X' and want to cross the intersection. The lights are green. What should you do?",
     "image": "94.png",
     "category":"Intersections",
     "options": [
@@ -3591,7 +3591,7 @@
   },
   
   {
-    "question": "Which movements shown in the diagram can legally be made by the driver of the car marked "A"?",
+    "question": "Which movements shown in the diagram can legally be made by the driver of the car marked 'A'?",
     "image": "98.png",
     "category":"Driving General",
     "options": [
@@ -4731,8 +4731,7 @@
     "options": [
       {
         "sno": 1,
-        "option": "Must not overtake the stopped vehicle.
-"
+        "option": "Must not overtake the stopped vehicle."
       },
       {
         "sno": 2,
@@ -5356,8 +5355,7 @@
   },
   
   {
-    "question": "When you see this sign, you should -
-",
+    "question": "When you see this sign, you should -",
     "image": "141.png",
     "category":"Car General",
     "options": [
@@ -5672,8 +5670,7 @@
   },
   
   {
-    "question": "When you wish to drive straight ahead at a roundabout, you may enter from either the left or right lane. As you continue around you should -
-",
+    "question": "When you wish to drive straight ahead at a roundabout, you may enter from either the left or right lane. As you continue around you should -",
     "image": "154.png",
     "category":"Intersections",
     "options": [
@@ -6431,8 +6428,7 @@
   {
     "question": "You are about to move away from the kerb in your car. What is the last thing you should do before you move into traffic?",
     "image": "171.png",
-    "category":"Driving General
-",
+    "category":"Driving General",
     "options": [
       {
         "sno": 1,
@@ -6612,7 +6608,7 @@
       },
       {
         "sno": 3,
-        "option": "Put the handbrake on and put the transmission in "P" (park)."
+        "option": "Put the handbrake on and put the transmission in 'P' (park)."
       }
     ],
     "correct": 3

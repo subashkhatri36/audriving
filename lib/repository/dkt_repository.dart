@@ -33,11 +33,11 @@ class DktRepoImplement extends DrivingRepository {
             ),
           );
         }
-
+        String img=data[i]['image'];
         model.add(
           DktModel(
             question: question,
-            image: data[i]['image'],
+            image:img.isEmpty?'': 'assets/questions/$img',
             options: options,
             correct: data[i]['correct'],
             category: data[i]['category'],

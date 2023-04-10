@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:driveaustralia/ads/ads_lifecycle.dart';
+import 'package:driveaustralia/ads/ads_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -29,8 +33,13 @@ class _SplashPageState extends State<SplashPage> {
         body: BlocListener<DktBloc, DrivingState>(
       listener: (context, state) {
 
-        if (state.menu != null && state.models != null) {
-          context.replace('/navigation');
+        if (state.menu != null && state.models != null && state.categorys!=null) {
+           Timer(
+            const Duration(seconds: 2),
+                () {
+                  context.replace('/navigation');
+            },
+          );
         }
       },
       child: const SplashWidget(),
@@ -54,9 +63,16 @@ class SplashWidget extends StatefulWidget {
 }
 
 class _SplashWidgetState extends State<SplashWidget> {
+
+  late AppLifecycleReactor _appLifecycleReactor;
+
+
   @override
   void initState() {
     context.read<DktBloc>().add(FetchDktDataEvent());
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    _appLifecycleReactor = AppLifecycleReactor(
+        appOpenAdManager: appOpenAdManager);
     super.initState();
   }
 

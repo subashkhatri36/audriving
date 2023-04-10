@@ -23,9 +23,7 @@ class Dktapp extends StatelessWidget {
       providers: [
         BlocProvider<DktBloc>(
           create: (BuildContext context) => DktBloc(
-            DrivingState(
-
-            ),
+            DrivingState(),
           ),
         ),
       ],
@@ -35,6 +33,7 @@ class Dktapp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routerConfig: router,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
