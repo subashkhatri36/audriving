@@ -23,7 +23,12 @@ class _SplashPageState extends State<SplashPage> {
   // AdmobController admobController=AdmobController();
   @override
   void initState() {
-    // admobController.init();
+    Timer(
+      const Duration(seconds: 2),
+      () {
+        context.replace('/navigation');
+      },
+    );
     super.initState();
   }
 
@@ -31,27 +36,9 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlocListener<DktBloc, DrivingState>(
-      listener: (context, state) {
-
-        if (state.menu != null && state.models != null && state.categorys!=null) {
-           Timer(
-            const Duration(seconds: 2),
-                () {
-                  context.replace('/navigation');
-            },
-          );
-        }
-      },
+      listener: (context, state) {},
       child: const SplashWidget(),
-    )
-        //  BlocBuilder<DktBloc, DrivingState>(
-        //   builder: (context, state) {
-        //     return const SplashWidget();
-
-        //     // return widget here based on BlocA's state
-        //   },
-        // ),
-        );
+    ));
   }
 }
 
@@ -63,16 +50,14 @@ class SplashWidget extends StatefulWidget {
 }
 
 class _SplashWidgetState extends State<SplashWidget> {
-
   late AppLifecycleReactor _appLifecycleReactor;
-
 
   @override
   void initState() {
-    context.read<DktBloc>().add(FetchDktDataEvent());
+    // context.read<DktBloc>().add(FetchDktDataEvent());
     AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    _appLifecycleReactor = AppLifecycleReactor(
-        appOpenAdManager: appOpenAdManager);
+    _appLifecycleReactor =
+        AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
     super.initState();
   }
 

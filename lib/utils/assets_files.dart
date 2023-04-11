@@ -5,3 +5,4 @@ const String drivingImage = '${base}driving.png';
 const String intersectionImage = '${base}intersection.png';
 const String sealtbeltImage = '${base}sealtbelt.jpg';
 const String vulnerableImage = '${base}vulnerable.png';
+const String meImage = '${base}me.png';

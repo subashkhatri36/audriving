@@ -3,9 +3,6 @@
 //state
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import 'package:driveaustralia/bloc/model/cateory_model.dart';
 import 'package:driveaustralia/bloc/model/menu_model.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
@@ -20,6 +17,7 @@ final menuList = [
   MenuList(id: 5, menu: 'Vulnerable Road Users', icon: vulnerableImage),
   MenuList(id: 6, menu: 'Seat Belts', icon: sealtbeltImage),
   MenuList(id: 7, menu: 'Intersections', icon: intersectionImage),
+  MenuList(id: 8, menu: 'About Developer', icon: meImage),
 ];
 
 abstract class DktState {}
@@ -33,6 +31,7 @@ class DrivingState extends DktState {
   bool? loadingvalue;
   final bool answerSelect;
   final List<MenuList>? menu;
+
   DrivingState({
     this.models,
     this.model,
@@ -88,44 +87,58 @@ class LoadMenuEvent extends DktEvent {}
 
 class LoadCategoryEvent extends DktEvent {
   final String category;
+
   LoadCategoryEvent(this.category);
 }
-class RefreshEvent extends DktEvent {
 
-}
+class RefreshEvent extends DktEvent {}
 
 //bloc
 class DktBloc extends Bloc<DktEvent, DrivingState> {
   DktBloc(super.initialState) {
     final drivingRepo = DktRepoImplement();
+
     on<FetchDktDataEvent>((event, emit) async {
       List<DktModel> fetchModelData = await drivingRepo.getQuestions();
-      List<CategoryModel> fetchCategory = await drivingRepo.getCategory();
-      // final dktState =
-      //     DrivingState(models: fetchModelData, loadingvalue: false);
-
-      emit(DrivingState().copyWith(
+      emit(
+        DrivingState().copyWith(
           models: fetchModelData,
           loadingvalue: false,
-          categorys: fetchCategory,
-          menu: menuList));
+          menu: menuList,
+        ),
+      );
     });
     on<LoadMenuEvent>((event, emit) {
       emit(DrivingState().copyWith(menu: menuList));
     });
-    on<LoadCategoryEvent>((event, emit) {
-      List<DktModel> categoryQuestionList=[];
-      if(state.models!=null && event.category.toLowerCase()!="all"){
-        categoryQuestionList=state.models!.where((element) =>element.category.toLowerCase()== event.category.toLowerCase()).toList();
-      }else{
-        categoryQuestionList=state.models??[];
+
+    on<LoadCategoryEvent>((event, emit) async {
+      List<DktModel> categoryQuestionList = [];
+      int modelValue = state.models?.length ?? 0;
+      if (modelValue == 0) {
+        List<DktModel> fetchModelData = await drivingRepo.getQuestions();
+        emit(
+          DrivingState().copyWith(
+            models: fetchModelData,
+            loadingvalue: false,
+            menu: menuList,
+          ),
+        );
       }
-      print(categoryQuestionList);
-     emit( DrivingState().copyWith(categoryModelList: categoryQuestionList));
-      //List outputList = inputlist.where((o) => o['category_id'] == '1').toList();
+      if (state.models != null && event.category.toLowerCase() != "all") {
+        categoryQuestionList = state.models!
+            .where((element) =>
+                element.category.toLowerCase() == event.category.toLowerCase())
+            .toList();
+      } else {
+        categoryQuestionList = state.models ?? [];
+      }
+
+      emit(DrivingState().copyWith(categoryModelList: categoryQuestionList));
     });
-    on<RefreshEvent>((event,emit){
-      emit(DrivingState());
+    on<RefreshEvent>((event, emit) async {
+      // List<CategoryModel> fetchCategory = await drivingRepo.getCategory();
+      emit(DrivingState().copyWith(menu: menuList));
     });
   }
 }

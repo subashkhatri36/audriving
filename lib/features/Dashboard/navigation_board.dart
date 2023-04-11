@@ -1,6 +1,6 @@
 import 'package:driveaustralia/ads/banner.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
-import 'package:driveaustralia/widgets/dkt_button.dart';
+import 'package:driveaustralia/widgets/button_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,23 +13,25 @@ class NavigationBoard extends StatefulWidget {
 }
 
 class _NavigationBoardState extends State<NavigationBoard> {
-
   @override
   void initState() {
     context.read<DktBloc>().add(FetchDktDataEvent());
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<DktBloc>().state;
+    final state = context
+        .watch<DktBloc>()
+        .state;
 
     return Scaffold(
       body: SafeArea(
-        minimum:const EdgeInsets.all(20),
+        minimum: const EdgeInsets.all(20),
         child: Column(children: [
           //Here is banner ads
-         const AdmobBannerAdWidget(),
+          const AdmobBannerAdWidget(),
           if (state.menu != null)
             Expanded(
               child: GridView.count(
@@ -41,12 +43,22 @@ class _NavigationBoardState extends State<NavigationBoard> {
                   return InkWell(
                     onTap: () {
                       //pass parameter and Id
-                      var id =state.menu?[index].icon??'' ;
-                      var category = state.menu?[index].menu??'';
-                      // context.read<DktBloc>().add(LoadCategoryEvent(category??''));
-                      context.go( context.namedLocation('questionsanswer',params: {'id': id, 'category': category}));
+                      var id = state.menu?[index].id ?? '';
+                      var category = state.menu?[index].menu ?? '';
+                      
+                      if (id == 8) {
+                        GoRouter.of(context).go('/aboutdeveloper');
+                      } else {
+                        GoRouter.of(context).go(
+                          context.namedLocation('questionsanswer', params: {
+                            'id': id.toString(),
+                            'category': category,
+                            'lastPath': GoRouterState
+                                .of(context)
+                                .location,
 
-
+                          },),);
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -54,7 +66,7 @@ class _NavigationBoardState extends State<NavigationBoard> {
                             width: 1,
                           ),
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(20))),
+                          const BorderRadius.all(Radius.circular(20))),
                       padding: const EdgeInsets.all(8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +74,10 @@ class _NavigationBoardState extends State<NavigationBoard> {
                         children: [
                           Image.asset(
                             state.menu?[index].icon ?? '',
-                            height: MediaQuery.of(context).size.height * 0.05,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
                             fit: BoxFit.fitHeight,
                           ),
                           const SizedBox(
@@ -70,7 +85,8 @@ class _NavigationBoardState extends State<NavigationBoard> {
                           ),
                           Text(
                             state.menu?[index].menu ?? '',
-                            style: Theme.of(context)
+                            style: Theme
+                                .of(context)
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
@@ -83,25 +99,16 @@ class _NavigationBoardState extends State<NavigationBoard> {
                 }),
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-              DktButton(text: 'Start Practise',onPressed: (){
-               // '/questionanswer/:id/:category'
-                var id ='0' ;
-                var param2 = "All";
-                context.goNamed('/questionsanswer',params: {'id': id, 'category': param2});
-
-              },),
-                DktButton(text: 'Start Test',onPressed: (){},)
-              ],
-            ),
+          buttonMenu(
+            context: context,
+            id: 0,
+            category: 'All',
+            lastPath: GoRouterState
+                .of(context)
+                .location,
           ),
         ]),
       ),
     );
   }
 }
-
-
