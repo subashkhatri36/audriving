@@ -32,6 +32,7 @@ class DrivingState extends DktState {
   final bool answerSelect;
   final int selectedIndex;
   final List<MenuList>? menu;
+  final int index;
 
   DrivingState({
     this.modelList,
@@ -41,6 +42,7 @@ class DrivingState extends DktState {
     this.answerSelect = false,
     this.selectedIndex = -1,
     this.menu,
+    this.index = 0,
   });
 
   DrivingState copyWith({
@@ -51,16 +53,17 @@ class DrivingState extends DktState {
     bool? answerSelect,
     int? selectedIndex,
     List<MenuList>? menu,
+    int? index,
   }) {
     return DrivingState(
-      modelList: modelList ?? this.modelList,
-      model: model ?? this.model,
-      categorys: categorys ?? this.categorys,
-      loadingvalue: loadingvalue ?? this.loadingvalue,
-      answerSelect: answerSelect ?? this.answerSelect,
-      selectedIndex: selectedIndex ?? this.selectedIndex,
-      menu: menu ?? this.menu,
-    );
+        modelList: modelList ?? this.modelList,
+        model: model ?? this.model,
+        categorys: categorys ?? this.categorys,
+        loadingvalue: loadingvalue ?? this.loadingvalue,
+        answerSelect: answerSelect ?? this.answerSelect,
+        selectedIndex: selectedIndex ?? this.selectedIndex,
+        menu: menu ?? this.menu,
+        index: index ?? this.index);
   }
 }
 
@@ -159,7 +162,10 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
           element.category.toLowerCase() ==
               event.category.toLowerCase())
               .toList();
-          emit(DrivingState().copyWith(modelList: questionModelList));
+          emit(DrivingState().copyWith(
+            modelList: masterModelList,
+            loadingvalue: false,
+          ));
         }
       }
     });
@@ -170,25 +176,18 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
     on<StartPractiseEvent>((event, emit) async {
       emit(DrivingState().copyWith(loadingvalue: true));
 
-      if (event.category == previousCategory) {
-        emit(
-          DrivingState().copyWith(
-            model: questionModelList[event.index],
-            loadingvalue: false,
-          ),
-        );
-      } else {
+      if (event.category != previousCategory) {
         previousCategory = event.category.toLowerCase();
         questionModelList = masterModelList
             .where((element) =>
-        element.category.toLowerCase() ==
-            event.category.toLowerCase())
+        element.category.toLowerCase() == event.category.toLowerCase())
             .toList();
-        emit(DrivingState().copyWith(
+      }
+      emit(DrivingState().copyWith(
           model: questionModelList[event.index],
           loadingvalue: false,
-        ));
-      }
+          index: 0
+      ));
     });
   }
 }

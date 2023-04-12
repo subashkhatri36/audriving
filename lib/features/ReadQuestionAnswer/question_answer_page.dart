@@ -58,7 +58,7 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
           ),
           buttonMenu(
             context: context,
-            id: 0,
+            id: widget.id == null ? int.parse(widget.id ?? '0') : 0,
             category: widget.category ?? '',
             lastPath: GoRouterState.of(context).location,
           ),

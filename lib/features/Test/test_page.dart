@@ -30,11 +30,11 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read()<DktBloc>().state;
-    print('Loading');
-    print(state.loadingvalue);
-    print('Model');
-    print(state.model);
+    final state = context.watch<DktBloc>().state;
+    // print('Loading');
+    // print(state.loadingvalue);
+    // print('Model');
+    // print(state.model);
     return DrivingPage(
       lastpath: widget.lastPath,
       appBar: AppBar(
@@ -43,13 +43,12 @@ class _TestPageState extends State<TestPage> {
         ),
       ),
       body: state.loadingvalue
-          ? Text('Loading')
+          ? Text('Loaded')
           : showQuestionAnswer(
               model: state.model!,
               practiseOrTest: true,
-              index: 0,
-              context: context,
-            ),
+              index: state.index,
+              context: context),
     );
   }
 }
