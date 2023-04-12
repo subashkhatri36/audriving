@@ -1,5 +1,6 @@
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
+import 'package:driveaustralia/widgets/DrivingPage.dart';
 import 'package:driveaustralia/widgets/app_bar.dart';
 import 'package:driveaustralia/widgets/button_menu.dart';
 import 'package:driveaustralia/widgets/question_answer_widget.dart';
@@ -23,7 +24,6 @@ class QuestionAnswerPage extends StatefulWidget {
 class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
   @override
   void initState() {
-    print('this is reading');
     context.read<DktBloc>().add(LoadCategoryEvent(widget.category ?? ''));
     super.initState();
   }
@@ -32,7 +32,8 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
   Widget build(BuildContext context) {
     final state = context.watch<DktBloc>().state;
 
-    return Scaffold(
+    return DrivingPage(
+      lastpath: widget.lastPath,
       appBar: appBarBackButton(
         context,
         widget.category ?? '',
@@ -44,9 +45,9 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
             flex: 1,
             child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: state.categoryModelList?.length ?? 0,
+                itemCount: state.modelList?.length ?? 0,
                 itemBuilder: (context, index) {
-                  DktModel model = state.categoryModelList![index];
+                  DktModel model = state.modelList![index];
                   return showQuestionAnswer(
                     model: model,
                     practiseOrTest: false,

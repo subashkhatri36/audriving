@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:driveaustralia/ads/ads_controller.dart';
 import 'package:driveaustralia/ads/ads_lifecycle.dart';
 import 'package:driveaustralia/ads/ads_manager.dart';
+import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:driveaustralia/bloc/dkt_bloc.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -20,15 +21,10 @@ class _SplashPageState extends State<SplashPage> {
     return MobileAds.instance.initialize();
   }
 
-  // AdmobController admobController=AdmobController();
+  AdmobController admobController = AdmobController();
+
   @override
   void initState() {
-    Timer(
-      const Duration(seconds: 2),
-      () {
-        context.replace('/navigation');
-      },
-    );
     super.initState();
   }
 
@@ -36,7 +32,11 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlocListener<DktBloc, DrivingState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.loadingvalue) {
+          context.replace('/navigation');
+        }
+      },
       child: const SplashWidget(),
     ));
   }
@@ -54,7 +54,7 @@ class _SplashWidgetState extends State<SplashWidget> {
 
   @override
   void initState() {
-    // context.read<DktBloc>().add(FetchDktDataEvent());
+    context.read<DktBloc>().add(FetchDktDataEvent());
     AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
     _appLifecycleReactor =
         AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
@@ -64,10 +64,11 @@ class _SplashWidgetState extends State<SplashWidget> {
   @override
   Widget build(BuildContext context) {
     final watch = context.watch<DktBloc>().state;
+
     return Center(
-      child: watch.models == null
-          ? Text('Model is Empty')
-          : Text('Model is not Empty'),
+      child: watch.loadingvalue
+          ? Text('Model loading')
+          : Text('Model loading finished'),
     );
   }
 }

@@ -1,4 +1,8 @@
+import 'package:driveaustralia/bloc/dkt_bloc.dart';
+import 'package:driveaustralia/widgets/DrivingPage.dart';
+import 'package:driveaustralia/widgets/question_answer_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class TestPage extends StatefulWidget {
@@ -19,14 +23,33 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   @override
+  void initState() {
+    context.read<DktBloc>().add(StartPractiseEvent(widget.category ?? '', 0));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final state = context.read()<DktBloc>().state;
+    print('Loading');
+    print(state.loadingvalue);
+    print('Model');
+    print(state.model);
+    return DrivingPage(
+      lastpath: widget.lastPath,
       appBar: AppBar(
         leading: BackButton(
           onPressed: () => context.go(widget.lastPath),
         ),
       ),
-      body: Container(),
+      body: state.loadingvalue
+          ? Text('Loading')
+          : showQuestionAnswer(
+              model: state.model!,
+              practiseOrTest: true,
+              index: 0,
+              context: context,
+            ),
     );
   }
 }

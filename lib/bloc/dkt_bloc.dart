@@ -2,6 +2,8 @@
 
 //state
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:driveaustralia/bloc/model/cateory_model.dart';
 import 'package:driveaustralia/bloc/model/menu_model.dart';
@@ -23,44 +25,40 @@ final menuList = [
 abstract class DktState {}
 
 class DrivingState extends DktState {
-  final List<DktModel>? models;
-  final List<DktModel>? categoryModelList;
+  final List<DktModel>? modelList;
   final DktModel? model;
   final List<CategoryModel>? categorys;
-  final bool isanimation;
-  bool? loadingvalue;
+  final bool loadingvalue;
   final bool answerSelect;
+  final int selectedIndex;
   final List<MenuList>? menu;
 
   DrivingState({
-    this.models,
+    this.modelList,
     this.model,
     this.categorys,
-    this.isanimation = false,
     this.loadingvalue = false,
     this.answerSelect = false,
+    this.selectedIndex = -1,
     this.menu,
-    this.categoryModelList,
   });
 
   DrivingState copyWith({
-    List<DktModel>? models,
-    List<DktModel>? categoryModelList,
+    List<DktModel>? modelList,
     DktModel? model,
     List<CategoryModel>? categorys,
-    bool? isanimation,
     bool? loadingvalue,
     bool? answerSelect,
+    int? selectedIndex,
     List<MenuList>? menu,
   }) {
     return DrivingState(
-      models: models ?? this.models,
-      categoryModelList: categoryModelList ?? this.categoryModelList,
+      modelList: modelList ?? this.modelList,
       model: model ?? this.model,
       categorys: categorys ?? this.categorys,
-      isanimation: isanimation ?? this.isanimation,
       loadingvalue: loadingvalue ?? this.loadingvalue,
       answerSelect: answerSelect ?? this.answerSelect,
+      selectedIndex: selectedIndex ?? this.selectedIndex,
       menu: menu ?? this.menu,
     );
   }
@@ -77,9 +75,19 @@ class SelectAnswerEvent extends DktEvent {}
 
 class ShowRules extends DktEvent {}
 
-class NextQuestion extends DktEvent {}
+class NextQuestion extends DktEvent {
+  final List<DktModel> modelList;
+  final int index;
 
-class PreviousQuestion extends DktEvent {}
+  NextQuestion(this.modelList, this.index);
+}
+
+class PreviousQuestion extends DktEvent {
+  final List<DktModel> modelList;
+  final int index;
+
+  PreviousQuestion(this.modelList, this.index);
+}
 
 class ShowResult extends DktEvent {}
 
@@ -93,52 +101,94 @@ class LoadCategoryEvent extends DktEvent {
 
 class RefreshEvent extends DktEvent {}
 
+class StartPractiseEvent extends DktEvent {
+  final String category;
+  final int index;
+
+  StartPractiseEvent(this.category, this.index);
+}
+
 //bloc
 class DktBloc extends Bloc<DktEvent, DrivingState> {
   DktBloc(super.initialState) {
     final drivingRepo = DktRepoImplement();
-
+    List<DktModel> masterModelList = [];
+    List<CategoryModel> categroyModelList = [];
+    List<DktModel> questionModelList = [];
+    String previousCategory = '';
+//
     on<FetchDktDataEvent>((event, emit) async {
+      emit(DrivingState().copyWith(loadingvalue: true));
       List<DktModel> fetchModelData = await drivingRepo.getQuestions();
+      List<CategoryModel> fetchCategory = await drivingRepo.getCategory();
+      categroyModelList = fetchCategory;
+      masterModelList = fetchModelData;
+      Timer(
+        const Duration(seconds: 2),
+            () {},
+      );
       emit(
         DrivingState().copyWith(
-          models: fetchModelData,
           loadingvalue: false,
           menu: menuList,
         ),
       );
     });
+    //
     on<LoadMenuEvent>((event, emit) {
       emit(DrivingState().copyWith(menu: menuList));
     });
 
     on<LoadCategoryEvent>((event, emit) async {
-      List<DktModel> categoryQuestionList = [];
-      int modelValue = state.models?.length ?? 0;
-      if (modelValue == 0) {
-        List<DktModel> fetchModelData = await drivingRepo.getQuestions();
-        emit(
-          DrivingState().copyWith(
-            models: fetchModelData,
-            loadingvalue: false,
-            menu: menuList,
-          ),
-        );
-      }
-      if (state.models != null && event.category.toLowerCase() != "all") {
-        categoryQuestionList = state.models!
-            .where((element) =>
-                element.category.toLowerCase() == event.category.toLowerCase())
-            .toList();
+      if (previousCategory == event.category.toLowerCase()) {
+        emit(DrivingState().copyWith(modelList: questionModelList));
       } else {
-        categoryQuestionList = state.models ?? [];
+        if (event.category.toLowerCase() == 'all') {
+          previousCategory = event.category.toLowerCase();
+          emit(
+            DrivingState().copyWith(
+              modelList: masterModelList,
+              loadingvalue: false,
+              menu: menuList,
+            ),
+          );
+        } else {
+          previousCategory = event.category.toLowerCase();
+          questionModelList = masterModelList
+              .where((element) =>
+          element.category.toLowerCase() ==
+              event.category.toLowerCase())
+              .toList();
+          emit(DrivingState().copyWith(modelList: questionModelList));
+        }
       }
-
-      emit(DrivingState().copyWith(categoryModelList: categoryQuestionList));
     });
     on<RefreshEvent>((event, emit) async {
       // List<CategoryModel> fetchCategory = await drivingRepo.getCategory();
       emit(DrivingState().copyWith(menu: menuList));
+    });
+    on<StartPractiseEvent>((event, emit) async {
+      emit(DrivingState().copyWith(loadingvalue: true));
+
+      if (event.category == previousCategory) {
+        emit(
+          DrivingState().copyWith(
+            model: questionModelList[event.index],
+            loadingvalue: false,
+          ),
+        );
+      } else {
+        previousCategory = event.category.toLowerCase();
+        questionModelList = masterModelList
+            .where((element) =>
+        element.category.toLowerCase() ==
+            event.category.toLowerCase())
+            .toList();
+        emit(DrivingState().copyWith(
+          model: questionModelList[event.index],
+          loadingvalue: false,
+        ));
+      }
     });
   }
 }

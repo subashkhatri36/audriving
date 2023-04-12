@@ -15,16 +15,12 @@ class NavigationBoard extends StatefulWidget {
 class _NavigationBoardState extends State<NavigationBoard> {
   @override
   void initState() {
-    context.read<DktBloc>().add(FetchDktDataEvent());
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = context
-        .watch<DktBloc>()
-        .state;
+    final state = context.watch<DktBloc>().state;
 
     return Scaffold(
       body: SafeArea(
@@ -42,22 +38,24 @@ class _NavigationBoardState extends State<NavigationBoard> {
                 children: List.generate(state.menu?.length ?? 0, (index) {
                   return InkWell(
                     onTap: () {
+                      //this is most effective way
                       //pass parameter and Id
                       var id = state.menu?[index].id ?? '';
                       var category = state.menu?[index].menu ?? '';
-                      
+
                       if (id == 8) {
                         GoRouter.of(context).go('/aboutdeveloper');
                       } else {
                         GoRouter.of(context).go(
-                          context.namedLocation('questionsanswer', params: {
-                            'id': id.toString(),
-                            'category': category,
-                            'lastPath': GoRouterState
-                                .of(context)
-                                .location,
-
-                          },),);
+                          context.namedLocation(
+                            'questionsanswer',
+                            params: {
+                              'id': id.toString(),
+                              'category': category,
+                              'lastPath': GoRouterState.of(context).location,
+                            },
+                          ),
+                        );
                       }
                     },
                     child: Container(
@@ -66,7 +64,7 @@ class _NavigationBoardState extends State<NavigationBoard> {
                             width: 1,
                           ),
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
+                              const BorderRadius.all(Radius.circular(20))),
                       padding: const EdgeInsets.all(8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,10 +72,7 @@ class _NavigationBoardState extends State<NavigationBoard> {
                         children: [
                           Image.asset(
                             state.menu?[index].icon ?? '',
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height * 0.05,
+                            height: MediaQuery.of(context).size.height * 0.05,
                             fit: BoxFit.fitHeight,
                           ),
                           const SizedBox(
@@ -85,8 +80,7 @@ class _NavigationBoardState extends State<NavigationBoard> {
                           ),
                           Text(
                             state.menu?[index].menu ?? '',
-                            style: Theme
-                                .of(context)
+                            style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
@@ -103,9 +97,7 @@ class _NavigationBoardState extends State<NavigationBoard> {
             context: context,
             id: 0,
             category: 'All',
-            lastPath: GoRouterState
-                .of(context)
-                .location,
+            lastPath: GoRouterState.of(context).location,
           ),
         ]),
       ),
