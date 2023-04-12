@@ -30,25 +30,31 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<DktBloc>().state;
-    // print('Loading');
-    // print(state.loadingvalue);
-    // print('Model');
-    // print(state.model);
+    final state = context
+        .watch<DktBloc>()
+        .state;
+    print(state.model);
+    print(state.index);
+    print(state.loadingvalue);
+    print(state.menu);
+    print(state.modelList);
+    print(state.categorys);
+    print(widget.id);
+
     return DrivingPage(
       lastpath: widget.lastPath,
       appBar: AppBar(
         leading: BackButton(
           onPressed: () => context.go(widget.lastPath),
         ),
+        title: Text(widget.category ?? ''),
       ),
-      body: state.loadingvalue
-          ? Text('Loaded')
-          : showQuestionAnswer(
-              model: state.model!,
-              practiseOrTest: true,
-              index: state.index,
-              context: context),
+      body: state.loadingvalue ? Text('Loaded') :
+      showQuestionAnswer(
+          model: state.model!,
+          practiseOrTest: true,
+          index: state.index,
+          context: context),
     );
   }
 }

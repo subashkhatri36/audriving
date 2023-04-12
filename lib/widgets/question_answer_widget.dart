@@ -11,175 +11,157 @@ Widget showQuestionAnswer({
   Color? textColor,
   Color? backgroundColor,
 }) {
-  print(model);
   return practiseOrTest
       ? Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const DktSpace(),
-      Text(
-        ' ${model.question}',
-        style:
-        Theme
-            .of(context)
-            .textTheme
-            .bodyLarge
-            ?.copyWith(fontSize: 16),
-        textAlign: TextAlign.justify,
-      ),
-      if (model.image.isNotEmpty)
-        const DktSpace(
-          height: 10,
-        ),
-      model.image.isNotEmpty
-          ? Image.asset(
-        model.image,
-        width: MediaQuery
-            .of(context)
-            .size
-            .height * 0.15,
-      )
-          : const SizedBox(),
-      if (model.image.isNotEmpty)
-        const DktSpace(
-          height: 10,
-        ),
-      const AdmobBannerAdWidget(),
-      Expanded(
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: model.options.length,
-          itemBuilder: (context, idx) {
-            final e = model.options[idx];
-            return InkWell(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 4, vertical: 8),
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 4, horizontal: 8),
-                  child: Row(
-                    children: [
-
-                      e.sno == model.correct
-                          ? const Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      )
-                          : const Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Text(
-                          e.option,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                            color: textColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ));
-          },
-        ),
-      ),
-      Container()
-    ],
-  )
-      : ListTile(
-    title: Column(
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          '${(index + 1)}. ${model.question}',
-          style: Theme
-              .of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontSize: 16),
-          textAlign: TextAlign.justify,
-        ),
-        if (model.image.isNotEmpty)
-          const DktSpace(
-            height: 10,
-          ),
-        model.image.isNotEmpty
-            ? Image.asset(
-          model.image,
-          width: MediaQuery
-              .of(context)
-              .size
-              .height * 0.15,
-        )
-            : const SizedBox(),
-      ],
-    ),
-    isThreeLine: true,
-    subtitle: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ...model.options
-              .map(
-                (e) =>
-                InkWell(
-                  onTap: practiseOrTest ? () {} : null,
-                  child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    margin: const EdgeInsets.only(top: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(vertical: 2),
-                          child: e.sno == model.correct
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const DktSpace(),
+            Text(
+              ' ${model.question}',
+              style:
+                  Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
+              textAlign: TextAlign.justify,
+            ),
+            if (model.image.isNotEmpty)
+              const DktSpace(
+                height: 10,
+              ),
+            model.image.isNotEmpty
+                ? Image.asset(
+                    model.image,
+                    width: MediaQuery.of(context).size.height * 0.15,
+                  )
+                : const SizedBox(),
+            if (model.image.isNotEmpty)
+              const DktSpace(
+                height: 10,
+              ),
+            const AdmobBannerAdWidget(),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: model.options.length,
+                itemBuilder: (context, idx) {
+                  final e = model.options[idx];
+                  return InkWell(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 8),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
+                      child: Row(
+                        children: [
+                          e.sno == model.correct
                               ? const Icon(
-                            Icons.check,
-                            color: Colors.green,
-                          )
+                                  Icons.check,
+                                  color: Colors.green,
+                                )
                               : const Icon(
-                            Icons.close,
-                            color: Colors.red,
+                                  Icons.close,
+                                  color: Colors.red,
+                                ),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
-                        Expanded(
+                          Expanded(
                             child: Text(
                               e.option,
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                  color: e.sno == model.correct
-                                      ? Colors.green
-                                      : Colors.red),
-                            )),
-                      ],
+                                    color: textColor ?? Colors.black,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  );
+                },
+              ),
+            ),
+            Container()
+          ],
+        )
+      : ListTile(
+          title: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                '${(index + 1)}. ${model.question}',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontSize: 16),
+                textAlign: TextAlign.justify,
+              ),
+              if (model.image.isNotEmpty)
+                const DktSpace(
+                  height: 10,
                 ),
-          )
-              .toList(),
-          if (!practiseOrTest) const Divider(),
-        ]),
-  );
+              model.image.isNotEmpty
+                  ? Image.asset(
+                      model.image,
+                      width: MediaQuery.of(context).size.height * 0.15,
+                    )
+                  : const SizedBox(),
+            ],
+          ),
+          isThreeLine: true,
+          subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ...model.options
+                    .map(
+                      (e) => InkWell(
+                        onTap: practiseOrTest ? () {} : null,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 2),
+                                child: e.sno == model.correct
+                                    ? const Icon(
+                                        Icons.check,
+                                        color: Colors.green,
+                                      )
+                                    : const Icon(
+                                        Icons.close,
+                                        color: Colors.red,
+                                      ),
+                              ),
+                              Expanded(
+                                  child: Text(
+                                e.option,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                        color: e.sno == model.correct
+                                            ? Colors.green
+                                            : Colors.red),
+                              )),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                if (!practiseOrTest) const Divider(),
+              ]),
+        );
 }

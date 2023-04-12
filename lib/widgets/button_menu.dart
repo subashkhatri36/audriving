@@ -8,13 +8,6 @@ Widget buttonMenu({
   required String category,
   required String lastPath,
 }) {
-  print('category');
-  print(category);
-  print('id');
-  print(id);
-  print('navigation');
-  print(lastPath);
-
   return Padding(
     padding: const EdgeInsets.all(10),
     child: Row(

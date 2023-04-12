@@ -15,6 +15,7 @@ class NavigationBoard extends StatefulWidget {
 class _NavigationBoardState extends State<NavigationBoard> {
   @override
   void initState() {
+    context.read<DktBloc>().add(RefreshEvent());
     super.initState();
   }
 
