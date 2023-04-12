@@ -128,7 +128,7 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
       masterModelList = fetchModelData;
       Timer(
         const Duration(seconds: 2),
-            () {},
+        () {},
       );
       emit(
         DrivingState().copyWith(
@@ -159,11 +159,11 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
           previousCategory = event.category.toLowerCase();
           questionModelList = masterModelList
               .where((element) =>
-          element.category.toLowerCase() ==
-              event.category.toLowerCase())
+                  element.category.toLowerCase() ==
+                  event.category.toLowerCase())
               .toList();
           emit(DrivingState().copyWith(
-            modelList: masterModelList,
+            modelList: questionModelList,
             loadingvalue: false,
           ));
         }
@@ -175,19 +175,19 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
     });
     on<StartPractiseEvent>((event, emit) async {
       emit(DrivingState().copyWith(loadingvalue: true));
+      print(event.category.toString());
+      questionModelList = [];
+      print('master model');
+      print(masterModelList.length);
+      questionModelList = masterModelList
+          .where((element) =>
+              element.category.toLowerCase() == event.category.toLowerCase())
+          .toList();
 
-      if (event.category != previousCategory) {
-        previousCategory = event.category.toLowerCase();
-        questionModelList = masterModelList
-            .where((element) =>
-        element.category.toLowerCase() == event.category.toLowerCase())
-            .toList();
-      }
       emit(DrivingState().copyWith(
           model: questionModelList[event.index],
           loadingvalue: false,
-          index: 0
-      ));
+          index: 0));
     });
   }
 }
