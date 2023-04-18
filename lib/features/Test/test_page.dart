@@ -9,12 +9,16 @@ class TestPage extends StatefulWidget {
   final String? id;
   final String? category;
   final String lastPath;
+  final String isTest;
+  final String isPractiseOrTest;
 
   const TestPage({
     Key? key,
     this.id,
     this.category,
     required this.lastPath,
+    required this.isPractiseOrTest,
+    required this.isTest,
   }) : super(key: key);
 
   @override
@@ -30,16 +34,7 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context
-        .watch<DktBloc>()
-        .state;
-    print(state.model);
-    print(state.index);
-    print(state.loadingvalue);
-    print(state.menu);
-    print(state.modelList);
-    print(state.categorys);
-    print(widget.id);
+    final state = context.watch<DktBloc>().state;
 
     return DrivingPage(
       lastpath: widget.lastPath,
@@ -49,12 +44,14 @@ class _TestPageState extends State<TestPage> {
         ),
         title: Text(widget.category ?? ''),
       ),
-      body: state.loadingvalue ? Text('Loaded') :
-      showQuestionAnswer(
-          model: state.model!,
-          practiseOrTest: true,
-          index: state.index,
-          context: context),
+      body: state.loadingvalue
+          ? const Text('Loaded')
+          : ShowQuestionAnswer(
+              model: state.model!,
+              practiseOrTest: widget.isPractiseOrTest == '0' ? false : true,
+              index: state.index,
+              isTest: widget.isTest == '0' ? false : true,
+            ),
     );
   }
 }

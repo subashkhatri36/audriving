@@ -33,6 +33,8 @@ class DrivingState extends DktState {
   final int selectedIndex;
   final List<MenuList>? menu;
   final int index;
+  final bool isPractiseOrTest;
+  final bool isTest;
 
   DrivingState({
     this.modelList,
@@ -43,6 +45,8 @@ class DrivingState extends DktState {
     this.selectedIndex = -1,
     this.menu,
     this.index = 0,
+    this.isPractiseOrTest = false,
+    this.isTest = false,
   });
 
   DrivingState copyWith({
@@ -54,16 +58,21 @@ class DrivingState extends DktState {
     int? selectedIndex,
     List<MenuList>? menu,
     int? index,
+    bool? isPractiseOrTest,
+    bool? isTest,
   }) {
     return DrivingState(
-        modelList: modelList ?? this.modelList,
-        model: model ?? this.model,
-        categorys: categorys ?? this.categorys,
-        loadingvalue: loadingvalue ?? this.loadingvalue,
-        answerSelect: answerSelect ?? this.answerSelect,
-        selectedIndex: selectedIndex ?? this.selectedIndex,
-        menu: menu ?? this.menu,
-        index: index ?? this.index);
+      modelList: modelList ?? this.modelList,
+      model: model ?? this.model,
+      categorys: categorys ?? this.categorys,
+      loadingvalue: loadingvalue ?? this.loadingvalue,
+      answerSelect: answerSelect ?? this.answerSelect,
+      selectedIndex: selectedIndex ?? this.selectedIndex,
+      menu: menu ?? this.menu,
+      index: index ?? this.index,
+      isPractiseOrTest: isPractiseOrTest ?? this.isPractiseOrTest,
+      isTest: isTest ?? this.isTest,
+    );
   }
 }
 
@@ -74,15 +83,19 @@ class FetchDktDataEvent extends DktEvent {}
 
 class WriteDktDataEvent extends DktEvent {}
 
-class SelectAnswerEvent extends DktEvent {}
+class SelectAnswerEvent extends DktEvent {
+  final int selectedIndex;
+  final int index;
+
+  SelectAnswerEvent({required this.selectedIndex, required this.index});
+}
 
 class ShowRules extends DktEvent {}
 
 class NextQuestion extends DktEvent {
-  final List<DktModel> modelList;
   final int index;
 
-  NextQuestion(this.modelList, this.index);
+  NextQuestion(this.index);
 }
 
 class PreviousQuestion extends DktEvent {
@@ -128,7 +141,7 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
       masterModelList = fetchModelData;
       Timer(
         const Duration(seconds: 2),
-        () {},
+            () {},
       );
       emit(
         DrivingState().copyWith(
@@ -159,8 +172,8 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
           previousCategory = event.category.toLowerCase();
           questionModelList = masterModelList
               .where((element) =>
-                  element.category.toLowerCase() ==
-                  event.category.toLowerCase())
+          element.category.toLowerCase() ==
+              event.category.toLowerCase())
               .toList();
           emit(DrivingState().copyWith(
             modelList: questionModelList,
@@ -173,21 +186,38 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
       // List<CategoryModel> fetchCategory = await drivingRepo.getCategory();
       emit(DrivingState().copyWith(menu: menuList));
     });
+
+    on<SelectAnswerEvent>((event, emit) {
+      DktModel old = questionModelList[event.index]
+          .copyWith(selectCorrect: event.selectedIndex);
+
+      questionModelList[event.index] = old;
+      emit(DrivingState().copyWith(model: old, modelList: questionModelList));
+    });
+
     on<StartPractiseEvent>((event, emit) async {
       emit(DrivingState().copyWith(loadingvalue: true));
-      print(event.category.toString());
       questionModelList = [];
-      print('master model');
-      print(masterModelList.length);
+
       questionModelList = masterModelList
           .where((element) =>
-              element.category.toLowerCase() == event.category.toLowerCase())
+      element.category.toLowerCase() == event.category.toLowerCase() ||
+          event.category.toLowerCase() == 'all')
           .toList();
 
       emit(DrivingState().copyWith(
-          model: questionModelList[event.index],
+          model: questionModelList[event.index ?? 0],
           loadingvalue: false,
-          index: 0));
+          modelList: questionModelList,
+          index: event.index));
+    });
+
+    on<NextQuestion>((event, emit) {
+      emit(DrivingState().copyWith(
+          model: questionModelList[event.index ?? 0],
+          loadingvalue: false,
+          modelList: questionModelList,
+          index: event.index));
     });
   }
 }

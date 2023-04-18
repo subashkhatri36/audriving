@@ -30,7 +30,10 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<DktBloc>().state;
+    final state = context
+        .watch<DktBloc>()
+        .state;
+
 
     return DrivingPage(
       lastpath: widget.lastPath,
@@ -48,11 +51,12 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
                 itemCount: state.modelList?.length ?? 0,
                 itemBuilder: (context, index) {
                   DktModel model = state.modelList![index];
-                  return showQuestionAnswer(
+                  return ShowQuestionAnswer(
                     model: model,
                     practiseOrTest: false,
                     index: index,
-                    context: context,
+                    isTest: false,
+
                   );
                 }),
           ),
@@ -60,7 +64,9 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
             context: context,
             id: widget.id == null ? int.parse(widget.id ?? '0') : 0,
             category: widget.category ?? '',
-            lastPath: GoRouterState.of(context).location,
+            lastPath: GoRouterState
+                .of(context)
+                .location,
           ),
         ],
       ),

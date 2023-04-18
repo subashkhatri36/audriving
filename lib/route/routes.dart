@@ -20,12 +20,14 @@ final router = GoRouter(
       builder: (context, state) => const AboutDeveloperPage(),
     ),
     GoRoute(
-      path: '/testpage/:id/:category/:lastPath',
+      path: '/testpage/:id/:category/:lastPath/:isTest/:isPractiseOrTest',
       name: 'testpage',
       builder: (context, state) => TestPage(
         id: state.params['id'],
         category: state.params['category'],
         lastPath: state.params['lastPath'] ?? '',
+        isTest: state.params['isTest'] ?? '0',
+        isPractiseOrTest: state.params['isPractiseOrTest'] ?? '0',
       ),
     ),
     GoRoute(

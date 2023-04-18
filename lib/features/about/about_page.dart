@@ -21,7 +21,7 @@ class _AboutDeveloperPageState extends State<AboutDeveloperPage> {
     return Scaffold(
       appBar: appBarBackButton(
         context,
-        widget.category ?? '',
+        widget.category ?? 'all',
         widget.lastPath ?? '',
       ),
       body: Container(),

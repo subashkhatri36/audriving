@@ -19,6 +19,8 @@ Widget buttonMenu({
               'id': id.toString(),
               'category': category,
               'lastPath': lastPath,
+              'isTest': '0',
+              'isPractiseOrTest': '1',
             });
           },
         ),

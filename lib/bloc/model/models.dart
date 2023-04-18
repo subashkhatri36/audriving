@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 class Option {
   final int sno;
   final String option;
+
   const Option({
     required this.sno,
     required this.option,
@@ -60,29 +61,16 @@ class DktModel {
   final List<Option> options;
   final int correct;
   final String category;
+  final int? selectCorrect;
+
   DktModel({
     required this.question,
     required this.image,
     required this.options,
     required this.correct,
     required this.category,
+    this.selectCorrect,
   });
-
-  DktModel copyWith({
-    String? question,
-    String? image,
-    List<Option>? options,
-    int? correct,
-    String? category,
-  }) {
-    return DktModel(
-      question: question ?? this.question,
-      image: image ?? this.image,
-      options: options ?? this.options,
-      correct: correct ?? this.correct,
-      category: category ?? this.category,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -91,6 +79,7 @@ class DktModel {
       'options': options.map((x) => x.toMap()).toList(),
       'correct': correct,
       'category': category,
+      'selectCorrect': selectCorrect,
     };
   }
 
@@ -105,6 +94,7 @@ class DktModel {
       ),
       correct: map['correct'] as int,
       category: map['category'] as String,
+      selectCorrect: map['selectCorrect'] as int,
     );
   }
 
@@ -113,9 +103,22 @@ class DktModel {
   factory DktModel.fromJson(String source) =>
       DktModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  @override
-  String toString() {
-    return 'DktModel(question: $question, image: $image, options: $options, correct: $correct, category: $category)';
+  DktModel copyWith({
+    String? question,
+    String? image,
+    List<Option>? options,
+    int? correct,
+    String? category,
+    int? selectCorrect,
+  }) {
+    return DktModel(
+      question: question ?? this.question,
+      image: image ?? this.image,
+      options: options ?? this.options,
+      correct: correct ?? this.correct,
+      category: category ?? this.category,
+      selectCorrect: selectCorrect ?? this.selectCorrect,
+    );
   }
 
   @override
@@ -126,7 +129,8 @@ class DktModel {
         other.image == image &&
         listEquals(other.options, options) &&
         other.correct == correct &&
-        other.category == category;
+        other.category == category &&
+        other.selectCorrect == selectCorrect;
   }
 
   @override
@@ -135,6 +139,12 @@ class DktModel {
         image.hashCode ^
         options.hashCode ^
         correct.hashCode ^
-        category.hashCode;
+        category.hashCode ^
+        selectCorrect.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'DktModel(question: $question, image: $image, options: $options, correct: $correct, category: $category, selectCorrect: $selectCorrect)';
   }
 }
