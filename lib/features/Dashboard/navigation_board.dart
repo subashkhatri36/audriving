@@ -44,7 +44,16 @@ class _NavigationBoardState extends State<NavigationBoard> {
                     var category = state.menu?[index].menu ?? '';
 
                     if (id == 8) {
-                      GoRouter.of(context).go('/aboutdeveloper');
+                      GoRouter.of(context).go(
+                        context.namedLocation(
+                          'aboutdeveloper',
+                          params: {
+                            'id': id.toString(),
+                            'category': category,
+                            'lastPath': GoRouterState.of(context).location,
+                          },
+                        ),
+                      );
                     } else {
                       GoRouter.of(context).go(
                         context.namedLocation(

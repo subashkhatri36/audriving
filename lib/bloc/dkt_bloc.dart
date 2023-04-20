@@ -192,7 +192,11 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
           .copyWith(selectCorrect: event.selectedIndex);
 
       questionModelList[event.index] = old;
-      emit(DrivingState().copyWith(model: old, modelList: questionModelList));
+      emit(DrivingState().copyWith(
+        model: old,
+        modelList: questionModelList,
+        index: event.index,
+      ));
     });
 
     on<StartPractiseEvent>((event, emit) async {
@@ -213,11 +217,25 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
     });
 
     on<NextQuestion>((event, emit) {
+      int lastIndex = 0;
       emit(DrivingState().copyWith(
-          model: questionModelList[event.index ?? 0],
-          loadingvalue: false,
-          modelList: questionModelList,
-          index: event.index));
+        loadingvalue: true,
+      ));
+
+      if (event.index < questionModelList.length) {
+        lastIndex = event.index;
+        emit(DrivingState().copyWith(
+            model: questionModelList[event.index ?? 0],
+            loadingvalue: false,
+            modelList: questionModelList,
+            index: event.index));
+      } else {
+        emit(DrivingState().copyWith(
+            model: questionModelList[lastIndex ?? 0],
+            loadingvalue: false,
+            modelList: questionModelList,
+            index: -10));
+      }
     });
   }
 }

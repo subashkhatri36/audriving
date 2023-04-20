@@ -1,4 +1,5 @@
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
+import 'package:driveaustralia/bloc/model/models.dart';
 import 'package:driveaustralia/widgets/DrivingPage.dart';
 import 'package:driveaustralia/widgets/question_answer_widget.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +48,17 @@ class _TestPageState extends State<TestPage> {
       body: state.loadingvalue
           ? const Text('Loaded')
           : ShowQuestionAnswer(
-              model: state.model!,
+              model: state.model ??
+                  DktModel(
+                      question: '',
+                      image: '',
+                      options: [],
+                      correct: 0,
+                      category: ''),
               practiseOrTest: widget.isPractiseOrTest == '0' ? false : true,
               index: state.index,
               isTest: widget.isTest == '0' ? false : true,
+              lastPath: widget.lastPath,
             ),
     );
   }

@@ -16,15 +16,20 @@ final router = GoRouter(
       builder: (context, state) => const NavigationBoard(),
     ),
     GoRoute(
-      path: '/aboutdeveloper',
-      builder: (context, state) => const AboutDeveloperPage(),
+      path: '/aboutdeveloper/:id/:category/:lastPath',
+      name: 'aboutdeveloper',
+      builder: (context, state) => AboutDeveloperPage(
+        id: state.params['id'],
+        category: state.params['category'],
+        lastPath: state.params['lastPath'] ?? '',
+      ),
     ),
     GoRoute(
       path: '/testpage/:id/:category/:lastPath/:isTest/:isPractiseOrTest',
       name: 'testpage',
       builder: (context, state) => TestPage(
-        id: state.params['id'],
-        category: state.params['category'],
+        id: state.params['id'] ?? '0',
+        category: state.params['category'] ?? '',
         lastPath: state.params['lastPath'] ?? '',
         isTest: state.params['isTest'] ?? '0',
         isPractiseOrTest: state.params['isPractiseOrTest'] ?? '0',
