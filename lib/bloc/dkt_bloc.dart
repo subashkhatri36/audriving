@@ -22,6 +22,17 @@ final menuList = [
   MenuList(id: 8, menu: 'About Developer', icon: meImage),
 ];
 
+final category = [
+  MenuList(id: 1, menu: 'All', icon: drivingImage),
+  MenuList(id: 2, menu: 'Alcohol and Drugs', icon: alcoholImage),
+  MenuList(id: 3, menu: 'Car General', icon: cargeneralImage),
+  MenuList(id: 4, menu: 'Driving General', icon: drivingImage),
+  MenuList(id: 5, menu: 'Vulnerable Road Users', icon: vulnerableImage),
+  MenuList(id: 6, menu: 'Seat Belts', icon: sealtbeltImage),
+  MenuList(id: 7, menu: 'Intersections', icon: intersectionImage),
+  MenuList(id: 8, menu: 'About Developer', icon: meImage),
+];
+
 abstract class DktState {}
 
 class DrivingState extends DktState {
@@ -122,6 +133,13 @@ class StartPractiseEvent extends DktEvent {
   final int index;
 
   StartPractiseEvent(this.category, this.index);
+}
+
+class StartTestEvent extends DktEvent {
+  final String category;
+  final int index;
+
+  StartTestEvent(this.category, this.index);
 }
 
 //bloc
@@ -236,6 +254,28 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
             modelList: questionModelList,
             index: -10));
       }
+    });
+
+    on<StartTestEvent>((event, emit) {
+      emit(DrivingState().copyWith(loadingvalue: true));
+      questionModelList = [];
+      categroyModelList.forEach((category) {
+
+      });
+
+      //load individual
+
+      questionModelList = masterModelList
+          .where((element) =>
+      element.category.toLowerCase() == event.category.toLowerCase() ||
+          event.category.toLowerCase() == 'all')
+          .toList();
+
+      emit(DrivingState().copyWith(
+          model: questionModelList[event.index ?? 0],
+          loadingvalue: false,
+          modelList: questionModelList,
+          index: event.index));
     });
   }
 }

@@ -1,32 +1,38 @@
 [
-{
-    "category":"Car General",
-    "totalQuestions":8,
-    "wrongQuestions":2
-},
-{
-    "category":"Alcohol and Drugs",
-    "totalQuestions":5,
-    "wrongQuestions":0
-},
-{
-    "category":"Intersections",
-    "totalQuestions":5,
-    "wrongQuestions":0
-},
-{
-    "category":"Seat Belts",
-    "totalQuestions":2,
-    "wrongQuestions":0
-},
-{
-    "category":"Driving General",
-    "totalQuestions":10,
-    "wrongQuestions":2
-},
-{
-    "category":"Vulnerable Road Users",
-    "totalQuestions":5,
-    "wrongQuestions":0
-}
+  {
+    "category": "Car General",
+    "totalQuestions": 8,
+    "wrongQuestions": 2,
+    "icon": "cargeneralImage"
+  },
+  {
+    "category": "Alcohol and Drugs",
+    "totalQuestions": 5,
+    "wrongQuestions": 0,
+    "icon": "alcoholImage"
+  },
+  {
+    "category": "Intersections",
+    "totalQuestions": 5,
+    "wrongQuestions": 0,
+    "icon": "intersectionImage"
+  },
+  {
+    "category": "Seat Belts",
+    "totalQuestions": 2,
+    "wrongQuestions": 0,
+    "icon": "sealtbeltImage"
+  },
+  {
+    "category": "Driving General",
+    "totalQuestions": 10,
+    "wrongQuestions": 2,
+    "icon": "drivingImage"
+  },
+  {
+    "category": "Vulnerable Road Users",
+    "totalQuestions": 5,
+    "wrongQuestions": 0,
+    "icon": "vulnerableImage"
+  }
 ]

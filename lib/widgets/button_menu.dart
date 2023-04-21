@@ -31,6 +31,8 @@ Widget buttonMenu({
               'id': id.toString(),
               'category': 'test',
               'lastPath': lastPath,
+              'isTest': '1',
+              'isPractiseOrTest': '1',
             });
           },
         )

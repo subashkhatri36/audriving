@@ -4,6 +4,7 @@ import 'package:driveaustralia/widgets/dkt_button.dart';
 import 'package:driveaustralia/widgets/dkt_space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class ShowQuestionAnswer extends StatefulWidget {
@@ -31,6 +32,42 @@ class ShowQuestionAnswer extends StatefulWidget {
 }
 
 class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
+  late FToast fToast;
+
+  @override
+  void initState() {
+    fToast = FToast();
+    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
+    fToast.init(context);
+    super.initState();
+  }
+
+  showToast() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.red,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Icon(
+            Icons.check,
+            color: Colors.white,
+          ),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text(
+            "Please check Options",
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -149,13 +186,20 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                               : DktButton(
                                   text: 'Next',
                                   onPressed: () {
-                                    if (widget.model.selectCorrect != null) {
+                                    if (widget.model.selectCorrect != null ||
+                                        widget.isTest) {
                                       int nextInt = widget.index + 1;
                                       context
                                           .read<DktBloc>()
                                           .add(NextQuestion(nextInt));
                                     } else {
                                       //Here goes toast/
+                                      fToast.showToast(
+                                        child: showToast(),
+                                        gravity: ToastGravity.BOTTOM,
+                                        toastDuration:
+                                            const Duration(seconds: 2),
+                                      );
                                     }
                                   },
                                 ),
