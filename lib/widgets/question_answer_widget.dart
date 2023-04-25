@@ -79,13 +79,29 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                 children: [
                   const DktSpace(),
                   Text(
-                    widget.model.question,
+                    '${widget.index + 1}) ${widget.model.question}',
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
                         ?.copyWith(fontSize: 16),
                     textAlign: TextAlign.justify,
                   ),
+                  if (widget.isTest)
+                    const DktSpace(
+                      height: 10,
+                    ),
+                  if (widget.isTest)
+                    Text(
+                      '>(${widget.model.category})',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(fontSize: 16),
+                    ),
+                  if (widget.isTest)
+                    const DktSpace(
+                      height: 10,
+                    ),
                   if (widget.model.image.isNotEmpty)
                     const DktSpace(
                       height: 10,
@@ -189,9 +205,8 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                                     if (widget.model.selectCorrect != null ||
                                         widget.isTest) {
                                       int nextInt = widget.index + 1;
-                                      context
-                                          .read<DktBloc>()
-                                          .add(NextQuestion(nextInt));
+                                      context.read<DktBloc>().add(
+                                          NextQuestion(nextInt, widget.isTest));
                                     } else {
                                       //Here goes toast/
                                       fToast.showToast(

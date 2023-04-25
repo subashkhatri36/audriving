@@ -105,8 +105,9 @@ class ShowRules extends DktEvent {}
 
 class NextQuestion extends DktEvent {
   final int index;
+  final bool isTest;
 
-  NextQuestion(this.index);
+  NextQuestion(this.index, this.isTest);
 }
 
 class PreviousQuestion extends DktEvent {
@@ -144,11 +145,13 @@ class StartTestEvent extends DktEvent {
 
 //bloc
 class DktBloc extends Bloc<DktEvent, DrivingState> {
+  List<DktModel> questionModelList = [];
+
   DktBloc(super.initialState) {
     final drivingRepo = DktRepoImplement();
     List<DktModel> masterModelList = [];
     List<CategoryModel> categroyModelList = [];
-    List<DktModel> questionModelList = [];
+
     String previousCategory = '';
 //
     on<FetchDktDataEvent>((event, emit) async {
@@ -248,28 +251,88 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
             modelList: questionModelList,
             index: event.index));
       } else {
-        emit(DrivingState().copyWith(
-            model: questionModelList[lastIndex ?? 0],
-            loadingvalue: false,
-            modelList: questionModelList,
-            index: -10));
+        if (event.isTest) {
+
+        } else {
+          emit(DrivingState().copyWith(
+              model: questionModelList[lastIndex ?? 0],
+              loadingvalue: false,
+              modelList: questionModelList,
+              index: -10));
+        }
       }
     });
 
     on<StartTestEvent>((event, emit) {
       emit(DrivingState().copyWith(loadingvalue: true));
       questionModelList = [];
-      categroyModelList.forEach((category) {
 
-      });
+      List<DktModel> alcoholList = [];
+      List<DktModel> carList = [];
+      List<DktModel> drivingList = [];
+      List<DktModel> vulnerableList = [];
+      List<DktModel> seatList = [];
+      List<DktModel> intersectList = [];
+      for (var model in masterModelList) {
+        switch (model.category) {
+          case 'Alcohol and Drugs':
+            alcoholList.add(model);
+            break;
+          case 'Car General':
+            carList.add(model);
+            break;
+          case 'Driving General':
+            drivingList.add(model);
+            break;
+          case 'Vulnerable Road Users':
+            vulnerableList.add(model);
+            break;
+          case 'Seat Belts':
+            seatList.add(model);
+            break;
+          case 'Intersections':
+            intersectList.add(model);
+            break;
+        }
+      }
 
-      //load individual
+      //suffel list
+      alcoholList.shuffle();
+      carList.shuffle();
+      drivingList.shuffle();
+      vulnerableList.shuffle();
+      seatList.shuffle();
+      intersectList.shuffle();
 
-      questionModelList = masterModelList
-          .where((element) =>
-      element.category.toLowerCase() == event.category.toLowerCase() ||
-          event.category.toLowerCase() == 'all')
-          .toList();
+      int alc = 0,
+          car = 0,
+          dri = 0,
+          vuln = 0,
+          sea = 0,
+          inter = 0;
+      for (var category in categroyModelList) {
+        switch (category.category) {
+          case 'Alcohol and Drugs':
+            filterModelList(category.totalQuestions, alcoholList);
+
+            break;
+          case 'Car General':
+            filterModelList(category.totalQuestions, carList);
+            break;
+          case 'Driving General':
+            filterModelList(category.totalQuestions, drivingList);
+            break;
+          case 'Vulnerable Road Users':
+            filterModelList(category.totalQuestions, vulnerableList);
+            break;
+          case 'Seat Belts':
+            filterModelList(category.totalQuestions, seatList);
+            break;
+          case 'Intersections':
+            filterModelList(category.totalQuestions, intersectList);
+            break;
+        }
+      }
 
       emit(DrivingState().copyWith(
           model: questionModelList[event.index ?? 0],
@@ -277,5 +340,15 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
           modelList: questionModelList,
           index: event.index));
     });
+  }
+
+  filterModelList(int totalquestions, List<DktModel> list) {
+    int index = 1;
+    for (var l in list) {
+      if (index < totalquestions) {
+        index++;
+        questionModelList.add(l);
+      }
+    }
   }
 }

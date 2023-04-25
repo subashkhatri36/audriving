@@ -27,15 +27,22 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+
   @override
   void initState() {
-    context.read<DktBloc>().add(StartPractiseEvent(widget.category ?? '', 0));
+    if (widget.isTest == '1') {
+      context.read<DktBloc>().add(StartTestEvent(widget.category ?? '', 0));
+    } else {
+      context.read<DktBloc>().add(StartPractiseEvent(widget.category ?? '', 0));
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<DktBloc>().state;
+    final state = context
+        .watch<DktBloc>()
+        .state;
 
     return DrivingPage(
       lastpath: widget.lastPath,
@@ -48,18 +55,18 @@ class _TestPageState extends State<TestPage> {
       body: state.loadingvalue
           ? const Text('Loaded')
           : ShowQuestionAnswer(
-              model: state.model ??
-                  DktModel(
-                      question: '',
-                      image: '',
-                      options: [],
-                      correct: 0,
-                      category: ''),
-              practiseOrTest: widget.isPractiseOrTest == '0' ? false : true,
-              index: state.index,
-              isTest: widget.isTest == '0' ? false : true,
-              lastPath: widget.lastPath,
-            ),
+        model: state.model ??
+            DktModel(
+                question: '',
+                image: '',
+                options: [],
+                correct: 0,
+                category: ''),
+        practiseOrTest: widget.isPractiseOrTest == '0' ? false : true,
+        index: state.index,
+        isTest: widget.isTest == '0' ? false : true,
+        lastPath: widget.lastPath,
+      ),
     );
   }
 }
