@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:driveaustralia/ads/ads_controller.dart';
 import 'package:driveaustralia/ads/ads_lifecycle.dart';
 import 'package:driveaustralia/ads/ads_manager.dart';
@@ -17,10 +15,6 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  Future<InitializationStatus> _initGoogleMobileAds() {
-    return MobileAds.instance.initialize();
-  }
-
   AdmobController admobController = AdmobController();
 
   @override
@@ -51,6 +45,8 @@ class SplashWidget extends StatefulWidget {
 
 class _SplashWidgetState extends State<SplashWidget> {
   late AppLifecycleReactor _appLifecycleReactor;
+  late AppOpenAd appOpenAd;
+  bool isAdLoaded = false;
 
   @override
   void initState() {
@@ -58,6 +54,7 @@ class _SplashWidgetState extends State<SplashWidget> {
     AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
     _appLifecycleReactor =
         AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+    _appLifecycleReactor.listenToAppStateChanges();
     super.initState();
   }
 
@@ -67,8 +64,8 @@ class _SplashWidgetState extends State<SplashWidget> {
 
     return Center(
       child: watch.loadingvalue
-          ? Text('Model loading')
-          : Text('Model loading finished'),
+          ? const Text('Model loading')
+          : const Text('Model loading finished'),
     );
   }
 }

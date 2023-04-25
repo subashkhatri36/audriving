@@ -1,9 +1,7 @@
 import 'package:driveaustralia/ads/ad_helper.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'dart:io' show Platform;
 
 class AppOpenAdManager {
-
   String adUnitId = AdHelper.appOpenId;
 
   AppOpenAd? _appOpenAd;
@@ -14,7 +12,6 @@ class AppOpenAdManager {
     return _appOpenAd != null;
   }
 
-
   /// Load an AppOpenAd.
   void loadAd() {
     AppOpenAd.load(
@@ -24,6 +21,8 @@ class AppOpenAdManager {
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
           _appOpenAd = ad;
+          print('=========ads============');
+          print(ad.request);
         },
         onAdFailedToLoad: (error) {
           print('AppOpenAd failed to load: $error');
@@ -32,7 +31,6 @@ class AppOpenAdManager {
       ),
     );
   }
-
 
   void showAdIfAvailable() {
     if (!isAdAvailable) {
@@ -65,5 +63,4 @@ class AppOpenAdManager {
       },
     );
   }
-
 }

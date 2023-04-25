@@ -3,6 +3,7 @@ import 'package:driveaustralia/features/ReadQuestionAnswer/question_answer_page.
 import 'package:driveaustralia/features/Splash/splash_page.dart';
 import 'package:driveaustralia/features/Test/test_page.dart';
 import 'package:driveaustralia/features/about/about_page.dart';
+import 'package:driveaustralia/features/result/result_page.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
@@ -41,6 +42,13 @@ final router = GoRouter(
       builder: (context, state) => QuestionAnswerPage(
         id: state.params['id'],
         category: state.params['category'],
+        lastPath: state.params['lastPath'] ?? '',
+      ),
+    ),
+    GoRoute(
+      path: '/showresult/:lastPath',
+      name: 'showresult',
+      builder: (context, state) => ResultPage(
         lastPath: state.params['lastPath'] ?? '',
       ),
     ),

@@ -27,7 +27,6 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-
   @override
   void initState() {
     if (widget.isTest == '1') {
@@ -40,13 +39,12 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context
-        .watch<DktBloc>()
-        .state;
+    final state = context.watch<DktBloc>().state;
 
     return DrivingPage(
       lastpath: widget.lastPath,
       appBar: AppBar(
+        backgroundColor: Colors.blue.shade800,
         leading: BackButton(
           onPressed: () => context.go(widget.lastPath),
         ),
@@ -55,18 +53,19 @@ class _TestPageState extends State<TestPage> {
       body: state.loadingvalue
           ? const Text('Loaded')
           : ShowQuestionAnswer(
-        model: state.model ??
-            DktModel(
-                question: '',
-                image: '',
-                options: [],
-                correct: 0,
-                category: ''),
-        practiseOrTest: widget.isPractiseOrTest == '0' ? false : true,
-        index: state.index,
-        isTest: widget.isTest == '0' ? false : true,
-        lastPath: widget.lastPath,
-      ),
+              model: state.model ??
+                  DktModel(
+                      question: '',
+                      image: '',
+                      options: [],
+                      correct: 0,
+                      category: ''),
+              practiseOrTest: widget.isPractiseOrTest == '0' ? false : true,
+              index: state.index,
+              isTest: widget.isTest == '0' ? false : true,
+              lastPath: widget.lastPath,
+              totalQuestion: state.modelList?.length ?? 0,
+            ),
     );
   }
 }

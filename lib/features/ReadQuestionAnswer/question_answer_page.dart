@@ -1,3 +1,4 @@
+import 'package:driveaustralia/ads/banner.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
 import 'package:driveaustralia/widgets/DrivingPage.dart';
@@ -13,9 +14,12 @@ class QuestionAnswerPage extends StatefulWidget {
   final String? category;
   final String lastPath;
 
-  const QuestionAnswerPage(
-      {Key? key, this.id, this.category, required this.lastPath})
-      : super(key: key);
+  const QuestionAnswerPage({
+    Key? key,
+    this.id,
+    this.category,
+    required this.lastPath,
+  }) : super(key: key);
 
   @override
   State<QuestionAnswerPage> createState() => _QuestionAnswerPageState();
@@ -54,14 +58,17 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
                     index: index,
                     isTest: false,
                     lastPath: widget.lastPath,
+                    totalQuestion: state.modelList?.length ?? 0,
                   );
                 }),
           ),
-          buttonMenu(
+          const AdmobBannerAdWidget(),
+          ButtonMenu(
             context: context,
             id: widget.id == null ? int.parse(widget.id ?? '0') : 0,
             category: widget.category ?? '',
             lastPath: GoRouterState.of(context).location,
+            categoryModel: state.categorys ?? [],
           ),
         ],
       ),

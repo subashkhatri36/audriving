@@ -1,3 +1,5 @@
+import 'package:driveaustralia/ads/ads_controller.dart';
+import 'package:driveaustralia/ads/banner.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
 import 'package:driveaustralia/widgets/dkt_button.dart';
@@ -15,6 +17,7 @@ class ShowQuestionAnswer extends StatefulWidget {
   final Color? backgroundColor;
   final bool isTest;
   final String lastPath;
+  final int totalQuestion;
 
   const ShowQuestionAnswer({
     Key? key,
@@ -25,6 +28,7 @@ class ShowQuestionAnswer extends StatefulWidget {
     this.backgroundColor,
     this.isTest = false,
     required this.lastPath,
+    required this.totalQuestion,
   }) : super(key: key);
 
   @override
@@ -53,14 +57,14 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
         mainAxisSize: MainAxisSize.min,
         children: const [
           Icon(
-            Icons.check,
+            Icons.warning,
             color: Colors.white,
           ),
           SizedBox(
             width: 12.0,
           ),
           Text(
-            "Please check Options",
+            "Please Select listed Options",
             style: TextStyle(color: Colors.white),
           ),
         ],
@@ -92,7 +96,7 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                     ),
                   if (widget.isTest)
                     Text(
-                      '>(${widget.model.category})',
+                      '(${widget.model.category})',
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
@@ -119,80 +123,77 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                       height: 10,
                     ),
                   // const AdmobBannerAdWidget(),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: widget.model.options.length,
-                      itemBuilder: (context, idx) {
-                        final e = widget.model.options[idx];
-                        return InkWell(
-                          onTap: () {
-                            context.read<DktBloc>().add(SelectAnswerEvent(
-                                selectedIndex: e.sno, index: widget.index));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: widget.isTest
-                                    ? e.sno == widget.model.selectCorrect
-                                        ? Colors.blue.shade400
-                                        : null
-                                    : null,
-                                border: widget.isTest
-                                    ? e.sno == widget.model.selectCorrect
-                                        ? Border.all(
-                                            color: Colors.blue.shade400)
-                                        : Border.all()
-                                    : Border.all(),
-                                borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 12),
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 8),
-                            child: Row(
-                              children: [
-                                ///Here is the logic for
-                                if (widget.model.selectCorrect != null &&
-                                    !widget.isTest)
-                                  e.sno == widget.model.selectCorrect
-                                      ? widget.model.selectCorrect ==
-                                              widget.model.correct
-                                          ? const Icon(
-                                              Icons.check,
-                                              color: Colors.green,
-                                            )
-                                          : const Icon(
-                                              Icons.close,
-                                              color: Colors.red,
-                                            )
-                                      : const SizedBox(),
-                                const SizedBox(
-                                  width: 10,
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.model.options.length,
+                    itemBuilder: (context, idx) {
+                      final e = widget.model.options[idx];
+                      return InkWell(
+                        onTap: () {
+                          context.read<DktBloc>().add(SelectAnswerEvent(
+                              selectedIndex: e.sno, index: widget.index));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: widget.isTest
+                                  ? e.sno == widget.model.selectCorrect
+                                      ? Colors.blue.shade400
+                                      : null
+                                  : null,
+                              border: widget.isTest
+                                  ? e.sno == widget.model.selectCorrect
+                                      ? Border.all(color: Colors.blue.shade400)
+                                      : Border.all()
+                                  : Border.all(),
+                              borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 12),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 8),
+                          child: Row(
+                            children: [
+                              ///Here is the logic for
+                              if (widget.model.selectCorrect != null &&
+                                  !widget.isTest)
+                                e.sno == widget.model.selectCorrect
+                                    ? widget.model.selectCorrect ==
+                                            widget.model.correct
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.green,
+                                          )
+                                        : const Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                          )
+                                    : const SizedBox(),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  e?.option ?? '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: widget.isTest
+                                            ? e.sno ==
+                                                    widget.model.selectCorrect
+                                                ? Colors.white
+                                                : widget.textColor ??
+                                                    Colors.black
+                                            : widget.textColor ?? Colors.black,
+                                      ),
                                 ),
-                                Expanded(
-                                  child: Text(
-                                    e?.option ?? '',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: widget.isTest
-                                              ? e.sno ==
-                                                      widget.model.selectCorrect
-                                                  ? Colors.white
-                                                  : widget.textColor ??
-                                                      Colors.black
-                                              : widget.textColor ??
-                                                  Colors.black,
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
+                  const AdmobBannerAdWidget(),
                   const DktSpace(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -200,6 +201,7 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                     children: [
                       if (widget.isTest && widget.index != 0)
                         DktButton(
+                          color: Colors.blue.shade600,
                           text: 'Previous',
                           onPressed: () {
                             int nextInt = widget.index - 1;
@@ -207,19 +209,27 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                                 index: nextInt, isTest: widget.isTest));
                           },
                         ),
-                      widget.index == -10
+                      (widget.index + 1) >= widget.totalQuestion &&
+                              !widget.isTest
                           ? DktButton(
                               text: 'Exit',
                               onPressed: () {
                                 context.go(widget.lastPath);
                               },
                             )
-                          : widget.index == -9
+                          : (widget.index + 1) >= widget.totalQuestion &&
+                                  widget.isTest
                               ? DktButton(
+                                  color: Colors.green,
                                   text: 'Show Result',
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context.goNamed('showresult',
+                                        params: {'lastPath': widget.lastPath});
+                                    AdmobController().loadInterstitialAd();
+                                  },
                                 )
                               : DktButton(
+                                  color: Colors.blue.shade800,
                                   text: 'Next',
                                   onPressed: () {
                                     if (widget.model.selectCorrect != null ||
@@ -317,6 +327,8 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                             ),
                           )
                           .toList(),
+                      if (widget.index == (5 * widget.index))
+                        const AdmobBannerAdWidget(),
                       if (!widget.practiseOrTest) const Divider(),
                     ]),
               ));

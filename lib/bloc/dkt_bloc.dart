@@ -169,23 +169,30 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
       masterModelList = fetchModelData;
       Timer(
         const Duration(seconds: 2),
-            () {},
+        () {},
       );
       emit(
         DrivingState().copyWith(
           loadingvalue: false,
           menu: menuList,
+          categorys: categroyModelList,
         ),
       );
     });
     //
     on<LoadMenuEvent>((event, emit) {
-      emit(DrivingState().copyWith(menu: menuList));
+      emit(DrivingState().copyWith(
+        menu: menuList,
+        categorys: categroyModelList,
+      ));
     });
 
     on<LoadCategoryEvent>((event, emit) async {
       if (previousCategory == event.category.toLowerCase()) {
-        emit(DrivingState().copyWith(modelList: questionModelList));
+        emit(DrivingState().copyWith(
+          modelList: questionModelList,
+          categorys: categroyModelList,
+        ));
       } else {
         if (event.category.toLowerCase() == 'all') {
           previousCategory = event.category.toLowerCase();
@@ -194,25 +201,30 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
               modelList: masterModelList,
               loadingvalue: false,
               menu: menuList,
+              categorys: categroyModelList,
             ),
           );
         } else {
           previousCategory = event.category.toLowerCase();
           questionModelList = masterModelList
               .where((element) =>
-          element.category.toLowerCase() ==
-              event.category.toLowerCase())
+                  element.category.toLowerCase() ==
+                  event.category.toLowerCase())
               .toList();
-          emit(DrivingState().copyWith(
-            modelList: questionModelList,
-            loadingvalue: false,
-          ));
+          emit(
+            DrivingState().copyWith(
+              modelList: questionModelList,
+              loadingvalue: false,
+              categorys: categroyModelList,
+            ),
+          );
         }
       }
     });
     on<RefreshEvent>((event, emit) async {
       // List<CategoryModel> fetchCategory = await drivingRepo.getCategory();
-      emit(DrivingState().copyWith(menu: menuList));
+      emit(DrivingState()
+          .copyWith(menu: menuList, categorys: categroyModelList));
     });
 
     on<SelectAnswerEvent>((event, emit) {
@@ -233,8 +245,8 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
 
       questionModelList = masterModelList
           .where((element) =>
-      element.category.toLowerCase() == event.category.toLowerCase() ||
-          event.category.toLowerCase() == 'all')
+              element.category.toLowerCase() == event.category.toLowerCase() ||
+              event.category.toLowerCase() == 'all')
           .toList();
 
       emit(DrivingState().copyWith(
@@ -258,13 +270,11 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
             modelList: questionModelList,
             index: event.index));
       } else {
-        if (event.isTest) {} else {
-          emit(DrivingState().copyWith(
-              model: questionModelList[lastIndex ?? 0],
-              loadingvalue: false,
-              modelList: questionModelList,
-              index: -10));
-        }
+        emit(DrivingState().copyWith(
+            model: questionModelList[lastIndex ?? 0],
+            loadingvalue: false,
+            modelList: questionModelList,
+            index: event.index - 1));
       }
     });
 
@@ -280,7 +290,7 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
             index: event.index));
       } else {
         emit(DrivingState().copyWith(
-            model: questionModelList[ 0],
+            model: questionModelList[0],
             loadingvalue: false,
             modelList: questionModelList,
             index: 0));
@@ -328,12 +338,7 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
       seatList.shuffle();
       intersectList.shuffle();
 
-      int alc = 0,
-          car = 0,
-          dri = 0,
-          vuln = 0,
-          sea = 0,
-          inter = 0;
+      int alc = 0, car = 0, dri = 0, vuln = 0, sea = 0, inter = 0;
       for (var category in categroyModelList) {
         switch (category.category) {
           case 'Alcohol and Drugs':
@@ -364,12 +369,21 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
           modelList: questionModelList,
           index: event.index));
     });
+
+    on<ShowResult>((event, emit) {
+      emit(DrivingState().copyWith(
+        loadingvalue: false,
+        modelList: questionModelList,
+        index: -1,
+        categorys: categroyModelList,
+      ));
+    });
   }
 
   filterModelList(int totalquestions, List<DktModel> list) {
     int index = 1;
     for (var l in list) {
-      if (index < totalquestions) {
+      if (index <= totalquestions) {
         index++;
         questionModelList.add(l);
       }

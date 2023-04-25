@@ -1,3 +1,4 @@
+import 'package:driveaustralia/ads/banner.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:driveaustralia/widgets/button_menu.dart';
 import 'package:flutter/material.dart';
@@ -102,12 +103,13 @@ class _NavigationBoardState extends State<NavigationBoard> {
               }),
             ),
           ),
-          buttonMenu(
-            context: context,
-            id: 0,
-            category: 'all',
-            lastPath: GoRouterState.of(context).location,
-          ),
+          const AdmobBannerAdWidget(),
+          ButtonMenu(
+              context: context,
+              id: 0,
+              category: 'all',
+              lastPath: GoRouterState.of(context).location,
+              categoryModel: state.categorys ?? []),
         ]),
       ),
     );
