@@ -94,6 +94,13 @@ class FetchDktDataEvent extends DktEvent {}
 
 class WriteDktDataEvent extends DktEvent {}
 
+class PreviousEvent extends DktEvent {
+  final int index;
+  final bool isTest;
+
+  PreviousEvent({required this.index, required this.isTest});
+}
+
 class SelectAnswerEvent extends DktEvent {
   final int selectedIndex;
   final int index;
@@ -251,15 +258,32 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
             modelList: questionModelList,
             index: event.index));
       } else {
-        if (event.isTest) {
-
-        } else {
+        if (event.isTest) {} else {
           emit(DrivingState().copyWith(
               model: questionModelList[lastIndex ?? 0],
               loadingvalue: false,
               modelList: questionModelList,
               index: -10));
         }
+      }
+    });
+
+    on<PreviousEvent>((event, emit) {
+      emit(DrivingState().copyWith(
+        loadingvalue: true,
+      ));
+      if (event.index > 0) {
+        emit(DrivingState().copyWith(
+            model: questionModelList[event.index ?? 0],
+            loadingvalue: false,
+            modelList: questionModelList,
+            index: event.index));
+      } else {
+        emit(DrivingState().copyWith(
+            model: questionModelList[ 0],
+            loadingvalue: false,
+            modelList: questionModelList,
+            index: 0));
       }
     });
 

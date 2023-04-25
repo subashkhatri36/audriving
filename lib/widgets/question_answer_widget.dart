@@ -96,7 +96,7 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
-                          ?.copyWith(fontSize: 16),
+                          ?.copyWith(fontSize: 16, color: Colors.grey),
                     ),
                   if (widget.isTest)
                     const DktSpace(
@@ -132,7 +132,17 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                border: Border.all(),
+                                color: widget.isTest
+                                    ? e.sno == widget.model.selectCorrect
+                                        ? Colors.blue.shade400
+                                        : null
+                                    : null,
+                                border: widget.isTest
+                                    ? e.sno == widget.model.selectCorrect
+                                        ? Border.all(
+                                            color: Colors.blue.shade400)
+                                        : Border.all()
+                                    : Border.all(),
                                 borderRadius: BorderRadius.circular(8)),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 4, vertical: 12),
@@ -165,8 +175,14 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                                         .textTheme
                                         .bodyMedium
                                         ?.copyWith(
-                                          color:
-                                              widget.textColor ?? Colors.black,
+                                          color: widget.isTest
+                                              ? e.sno ==
+                                                      widget.model.selectCorrect
+                                                  ? Colors.white
+                                                  : widget.textColor ??
+                                                      Colors.black
+                                              : widget.textColor ??
+                                                  Colors.black,
                                         ),
                                   ),
                                 ),
@@ -185,7 +201,11 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                       if (widget.isTest && widget.index != 0)
                         DktButton(
                           text: 'Previous',
-                          onPressed: () {},
+                          onPressed: () {
+                            int nextInt = widget.index - 1;
+                            context.read<DktBloc>().add(PreviousEvent(
+                                index: nextInt, isTest: widget.isTest));
+                          },
                         ),
                       widget.index == -10
                           ? DktButton(
