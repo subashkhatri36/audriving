@@ -1,9 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-//state
-
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:driveaustralia/bloc/model/cateory_model.dart';
 import 'package:driveaustralia/bloc/model/menu_model.dart';
@@ -167,10 +163,7 @@ class DktBloc extends Bloc<DktEvent, DrivingState> {
       List<CategoryModel> fetchCategory = await drivingRepo.getCategory();
       categroyModelList = fetchCategory;
       masterModelList = fetchModelData;
-      Timer(
-        const Duration(seconds: 2),
-        () {},
-      );
+
       emit(
         DrivingState().copyWith(
           loadingvalue: false,

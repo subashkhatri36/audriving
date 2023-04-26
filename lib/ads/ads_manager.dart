@@ -21,8 +21,6 @@ class AppOpenAdManager {
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
           _appOpenAd = ad;
-          print('=========ads============');
-          print(ad.request);
         },
         onAdFailedToLoad: (error) {
           print('AppOpenAd failed to load: $error');

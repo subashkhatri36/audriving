@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:driveaustralia/ads/ads_controller.dart';
 import 'package:driveaustralia/ads/ads_lifecycle.dart';
 import 'package:driveaustralia/ads/ads_manager.dart';
@@ -28,7 +30,12 @@ class _SplashPageState extends State<SplashPage> {
         body: BlocListener<DktBloc, DrivingState>(
       listener: (context, state) {
         if (state.loadingvalue) {
-          context.replace('/navigation');
+          Timer(
+            const Duration(seconds: 1),
+            () {
+              context.go('/navigation');
+            },
+          );
         }
       },
       child: const SplashWidget(),
@@ -63,9 +70,10 @@ class _SplashWidgetState extends State<SplashWidget> {
     final watch = context.watch<DktBloc>().state;
 
     return Center(
-      child: watch.loadingvalue
-          ? const Text('Model loading')
-          : const Text('Model loading finished'),
-    );
+        child: Image.asset(
+      'assets/dkt.png',
+      width: MediaQuery.of(context).size.width * .8,
+      fit: BoxFit.fitWidth,
+    ));
   }
 }

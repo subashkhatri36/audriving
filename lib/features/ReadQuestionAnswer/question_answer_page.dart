@@ -2,6 +2,7 @@ import 'package:driveaustralia/ads/banner.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
 import 'package:driveaustralia/widgets/DrivingPage.dart';
+import 'package:driveaustralia/widgets/animation_widget.dart';
 import 'package:driveaustralia/widgets/app_bar.dart';
 import 'package:driveaustralia/widgets/button_menu.dart';
 import 'package:driveaustralia/widgets/question_answer_widget.dart';
@@ -52,13 +53,15 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
                 itemCount: state.modelList?.length ?? 0,
                 itemBuilder: (context, index) {
                   DktModel model = state.modelList![index];
-                  return ShowQuestionAnswer(
-                    model: model,
-                    practiseOrTest: false,
-                    index: index,
-                    isTest: false,
-                    lastPath: widget.lastPath,
-                    totalQuestion: state.modelList?.length ?? 0,
+                  return FadeTransactionWidget(
+                    child: ShowQuestionAnswer(
+                      model: model,
+                      practiseOrTest: false,
+                      index: index,
+                      isTest: false,
+                      lastPath: widget.lastPath,
+                      totalQuestion: state.modelList?.length ?? 0,
+                    ),
                   );
                 }),
           ),

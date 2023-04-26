@@ -19,17 +19,16 @@ class DrivingPage extends StatefulWidget {
 class _DrivingPageState extends State<DrivingPage> {
   @override
   Widget build(BuildContext context) {
-    return
-      WillPopScope(
-        onWillPop: () async {
-          context.go(widget.lastpath);
-          return true;
-        },
-        child:
-        Scaffold(
-          appBar: widget.appBar,
-          body: widget.body,
-        ),
-      );
+    return WillPopScope(
+      onWillPop: () async {
+        context.go(widget.lastpath);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: widget.appBar,
+        body: SafeArea(child: widget.body ?? Container()),
+      ),
+    );
   }
 }

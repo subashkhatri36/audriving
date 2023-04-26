@@ -107,7 +107,7 @@ class ExamButton extends StatelessWidget {
                   onPressed: () {
                     GoRouter.of(context).goNamed('testpage', params: {
                       'id': id.toString(),
-                      'category': 'test',
+                      'category': 'Mock Test',
                       'lastPath': lastPath,
                       'isTest': '1',
                       'isPractiseOrTest': '1',
