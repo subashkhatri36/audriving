@@ -1,15 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:driveaustralia/bloc/model/cateory_model.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
-import 'dart:convert';
 import 'package:flutter/services.dart';
 
 String path = 'assets/dktdata.json';
 
 abstract class DrivingRepository {
   Future<List<DktModel>> getQuestions();
+
   Future<List<CategoryModel>> getCategory();
+
   Future<bool> storeQuestions(List<DktModel> models);
 }
 
@@ -33,11 +35,11 @@ class DktRepoImplement extends DrivingRepository {
             ),
           );
         }
-
+        String img = data[i]['image'];
         model.add(
           DktModel(
             question: question,
-            image: data[i]['image'],
+            image: img.isEmpty ? '' : 'assets/questions/$img',
             options: options,
             correct: data[i]['correct'],
             category: data[i]['category'],
@@ -65,19 +67,18 @@ class DktRepoImplement extends DrivingRepository {
   }
 
   @override
-  Future<List<CategoryModel>> getCategory() async{
+  Future<List<CategoryModel>> getCategory() async {
     try {
       List<CategoryModel> model = [];
-      final String response = await rootBundle.loadString('assets/category.json');
+      final String response =
+          await rootBundle.loadString('assets/category.json');
       final data = await json.decode(response);
 
       for (int i = 0; i < data.length; i++) {
         model.add(CategoryModel.fromMap(data[i]));
-
-        }
+      }
 
       return model;
-
     } catch (error) {
       print(error);
       return [];

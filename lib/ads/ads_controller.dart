@@ -6,7 +6,7 @@ import 'package:driveaustralia/widgets/device_info.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class AdmobController  {
+class AdmobController {
   // static AdmobController instance = Get.find();
 
   static final AdmobController _singleton = AdmobController._internal();
@@ -26,8 +26,10 @@ class AdmobController  {
     initGoogleMobileAds();
     loadInterstitialAd();
   }
+
   showInstAds() {
     if (isInterstitialAdReady) {
+      print('==========It showing');
       interstitialAd.show();
     }
   }
@@ -72,14 +74,14 @@ class AdmobController  {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       final TrackingStatus status =
-      await AppTrackingTransparency.trackingAuthorizationStatus;
+          await AppTrackingTransparency.trackingAuthorizationStatus;
       iosAdsStatus = '$status';
       if (status == TrackingStatus.denied) return;
       // If the system can show an authorization request dialog
       if (status == TrackingStatus.notDetermined) {
         // Request system's tracking authorization dialog
         final TrackingStatus status =
-        await AppTrackingTransparency.requestTrackingAuthorization();
+            await AppTrackingTransparency.requestTrackingAuthorization();
         iosAdsStatus = '$status';
       }
     } on PlatformException {

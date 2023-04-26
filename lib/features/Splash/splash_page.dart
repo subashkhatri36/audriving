@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:driveaustralia/ads/ads_controller.dart';
+import 'package:driveaustralia/ads/ads_lifecycle.dart';
+import 'package:driveaustralia/ads/ads_manager.dart';
+import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:driveaustralia/bloc/dkt_bloc.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -12,14 +17,10 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  Future<InitializationStatus> _initGoogleMobileAds() {
-    return MobileAds.instance.initialize();
-  }
+  AdmobController admobController = AdmobController();
 
-  // AdmobController admobController=AdmobController();
   @override
   void initState() {
-    // admobController.init();
     super.initState();
   }
 
@@ -28,21 +29,17 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
         body: BlocListener<DktBloc, DrivingState>(
       listener: (context, state) {
-
-        if (state.menu != null && state.models != null) {
-          context.replace('/navigation');
+        if (state.loadingvalue) {
+          Timer(
+            const Duration(seconds: 1),
+            () {
+              context.go('/navigation');
+            },
+          );
         }
       },
       child: const SplashWidget(),
-    )
-        //  BlocBuilder<DktBloc, DrivingState>(
-        //   builder: (context, state) {
-        //     return const SplashWidget();
-
-        //     // return widget here based on BlocA's state
-        //   },
-        // ),
-        );
+    ));
   }
 }
 
@@ -54,19 +51,29 @@ class SplashWidget extends StatefulWidget {
 }
 
 class _SplashWidgetState extends State<SplashWidget> {
+  late AppLifecycleReactor _appLifecycleReactor;
+  late AppOpenAd appOpenAd;
+  bool isAdLoaded = false;
+
   @override
   void initState() {
     context.read<DktBloc>().add(FetchDktDataEvent());
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    _appLifecycleReactor =
+        AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+    _appLifecycleReactor.listenToAppStateChanges();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final watch = context.watch<DktBloc>().state;
+
     return Center(
-      child: watch.models == null
-          ? Text('Model is Empty')
-          : Text('Model is not Empty'),
-    );
+        child: Image.asset(
+      'assets/dkt.png',
+      width: MediaQuery.of(context).size.width * .8,
+      fit: BoxFit.fitWidth,
+    ));
   }
 }
