@@ -6,6 +6,7 @@ import 'package:driveaustralia/widgets/animation_widget.dart';
 import 'package:driveaustralia/widgets/app_bar.dart';
 import 'package:driveaustralia/widgets/button_menu.dart';
 import 'package:driveaustralia/widgets/question_answer_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +66,7 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
                   );
                 }),
           ),
-          const AdmobBannerAdWidget(),
+          if (!kIsWeb) const AdmobBannerAdWidget(),
           ButtonMenu(
             context: context,
             id: widget.id == null ? int.parse(widget.id ?? '0') : 0,

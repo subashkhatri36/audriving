@@ -4,6 +4,7 @@ import 'package:driveaustralia/ads/ads_controller.dart';
 import 'package:driveaustralia/ads/ads_lifecycle.dart';
 import 'package:driveaustralia/ads/ads_manager.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('This is splash screen');
     return Scaffold(
         body: BlocListener<DktBloc, DrivingState>(
       listener: (context, state) {
@@ -51,17 +53,19 @@ class SplashWidget extends StatefulWidget {
 }
 
 class _SplashWidgetState extends State<SplashWidget> {
-  late AppLifecycleReactor _appLifecycleReactor;
-  late AppOpenAd appOpenAd;
+  AppLifecycleReactor? _appLifecycleReactor;
+  AppOpenAd? appOpenAd;
   bool isAdLoaded = false;
 
   @override
   void initState() {
     context.read<DktBloc>().add(FetchDktDataEvent());
-    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    _appLifecycleReactor =
-        AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
-    _appLifecycleReactor.listenToAppStateChanges();
+    if (!kIsWeb) {
+      AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+      _appLifecycleReactor =
+          AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+      _appLifecycleReactor?.listenToAppStateChanges();
+    }
     super.initState();
   }
 
