@@ -1,11 +1,8 @@
-import 'package:driveaustralia/ads/ads_controller.dart';
-import 'package:driveaustralia/ads/banner.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
 import 'package:driveaustralia/widgets/animation_widget.dart';
 import 'package:driveaustralia/widgets/dkt_button.dart';
 import 'package:driveaustralia/widgets/dkt_space.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -200,7 +197,7 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                         );
                       },
                     ),
-                    if (!kIsWeb) const AdmobBannerAdWidget(),
+                    // if (!kIsWeb) const AdmobBannerAdWidget(),
                     const DktSpace(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,9 +218,6 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                             ? DktButton(
                                 text: 'Exit',
                                 onPressed: () {
-                                  if (!kIsWeb) {
-                                    AdmobController().showInstAds();
-                                  }
                                   context.go(widget.lastPath);
                                 },
                               )
@@ -233,12 +227,6 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                                     color: Colors.green,
                                     text: 'Show Result',
                                     onPressed: () {
-                                      if (!kIsWeb) {
-                                        AdmobController().loadInterstitialAd();
-                                      }
-                                      if (!kIsWeb) {
-                                        AdmobController().showInstAds();
-                                      }
                                       context.goNamed('showresult', params: {
                                         'lastPath': widget.lastPath
                                       });
@@ -346,8 +334,8 @@ class _ShowQuestionAnswerState extends State<ShowQuestionAnswer> {
                             )
                             .toList(),
                         if (widget.index == (5 * v))
-                          if (!kIsWeb) const AdmobBannerAdWidget(),
-                        if (!widget.practiseOrTest) const Divider(),
+                          // if (!kIsWeb) const AdmobBannerAdWidget(),
+                          if (!widget.practiseOrTest) const Divider(),
                       ]),
                 )),
     );

@@ -1,4 +1,3 @@
-import 'package:driveaustralia/ads/banner.dart';
 import 'package:driveaustralia/bloc/dkt_bloc.dart';
 import 'package:driveaustralia/bloc/model/models.dart';
 import 'package:driveaustralia/widgets/DrivingPage.dart';
@@ -6,7 +5,6 @@ import 'package:driveaustralia/widgets/animation_widget.dart';
 import 'package:driveaustralia/widgets/dkt_button.dart';
 import 'package:driveaustralia/widgets/dkt_space.dart';
 import 'package:driveaustralia/widgets/exam_button.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -68,36 +66,34 @@ class _ResultPageState extends State<ResultPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      'assets/result.jpeg',
-                      height: 160,
-                      fit: BoxFit.fitHeight,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/result.jpeg',
+                    height: 160,
+                    fit: BoxFit.fitHeight,
                   ),
-                  Text(
-                    'You Result',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(color: r ? Colors.green : Colors.red),
-                  ),
-                  Text(
-                    r
-                        ? 'Hurrya! You passed this mock test. Please try another set of questions just clicking try again button.'
-                        : 'Sorry, You are not able to pass this mock test please try again.',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: r ? Colors.green : Colors.red),
-                  ),
-                ],
-              ),
+                ),
+                Text(
+                  'You Result',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(color: r ? Colors.green : Colors.red),
+                ),
+                Text(
+                  r
+                      ? 'Hurrya! You passed this mock test. Please try another set of questions just clicking try again button.'
+                      : 'Sorry, You are not able to pass this mock test please try again.',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: r ? Colors.green : Colors.red),
+                ),
+              ],
             ),
             const DktSpace(),
             const Divider(),
@@ -108,7 +104,7 @@ class _ResultPageState extends State<ResultPage> {
                       v++;
                       return Column(
                         children: const [
-                          AdmobBannerAdWidget(),
+                          // AdmobBannerAdWidget(),
                           Divider(),
                         ],
                       );
@@ -174,7 +170,7 @@ class _ResultPageState extends State<ResultPage> {
                     );
                   }),
             ),
-            if (!kIsWeb) const AdmobBannerAdWidget(),
+            // if (!kIsWeb) const AdmobBannerAdWidget(),
             Row(
               children: [
                 ExamButton(
